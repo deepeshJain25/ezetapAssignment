@@ -40,7 +40,12 @@ const MovieForm = (props) => {
   const [showError, setShowError] = useState({});
 
   useEffect(() => {
-    setMovieData(props.movieData);
+    console.log("add mode", addMode);
+    if (!addMode) {
+      setMovieData(props.movieData);
+    } else {
+      setMovieData({});
+    }
     setAllTheatres(theatres);
     setLocations(movieLocations);
   }, [props]);
@@ -68,8 +73,6 @@ const MovieForm = (props) => {
   };
 
   const handleLocations = () => {
-    console.log(locations);
-
     setLocations((prev) => {
       if (
         prev.findIndex((locData) => locData.name === locationRef.current) === -1 // checking if selectetd location is already present
@@ -327,37 +330,41 @@ const MovieForm = (props) => {
                 </Form.Group>
               </>
             ) : null}
-            <h5>Theatre Details:</h5>
-            {!allTheatres[selectedLocation.id] && (
-              <p>Please select the locations to see the details</p>
+            {showAddTheatreInput ? (
+              <>
+                <h5>Theatre Details:</h5>
+                {!allTheatres[selectedLocation.id] && (
+                  <p style={{ color: "red" }}>No Theatres</p>
+                )}
+                {allTheatres[selectedLocation.id] &&
+                  allTheatres[selectedLocation.id].map((theatreDetail) => {
+                    return (
+                      <div style={{ display: "flex" }}>
+                        <p style={{ marginRight: "20px" }}>
+                          {theatreDetail.name}
+                        </p>
+                        <Button
+                          style={{ marginRight: "10px" }}
+                          size="sm"
+                          onClick={() => handleShow(theatreDetail)}
+                          variant="primary"
+                        >
+                          Add Details
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => clearTheatre(theatreDetail)}
+                          variant="primary"
+                        >
+                          Clear Theatre
+                        </Button>
+                      </div>
+                    );
+                  })}
+              </>
+            ) : (
+              <p>Please select a location to show theatres</p>
             )}
-            {allTheatres[selectedLocation.id] &&
-              allTheatres[selectedLocation.id].length === 0 && (
-                <p style={{ color: "red" }}>No Theatres</p>
-              )}
-            {allTheatres[selectedLocation.id] &&
-              allTheatres[selectedLocation.id].map((theatreDetail) => {
-                return (
-                  <div style={{ display: "flex" }}>
-                    <p style={{ marginRight: "20px" }}>{theatreDetail.name}</p>
-                    <Button
-                      style={{ marginRight: "10px" }}
-                      size="sm"
-                      onClick={() => handleShow(theatreDetail)}
-                      variant="primary"
-                    >
-                      Add Details
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => clearTheatre(theatreDetail)}
-                      variant="primary"
-                    >
-                      Clear Theatre
-                    </Button>
-                  </div>
-                );
-              })}
           </Form>
         </Modal.Body>
         <Modal.Footer>
@@ -374,12 +381,9 @@ const MovieForm = (props) => {
           <Button
             variant="primary"
             onClick={() => {
-              console.log("########", movieData);
               if (addMode) {
-                console.log("add");
                 addToDb(movieData);
               } else {
-                console.log("edit");
                 updateDb(movieData, movieId);
               }
             }}

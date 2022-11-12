@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import { data } from "./Data";
 import MovieRow from "./MovieRow";
 import Filters from "./FilterAndSort";
 import MovieForm from "./Forms/MovieForm";
@@ -7,7 +6,6 @@ import { Table, Button } from "react-bootstrap";
 import { LocationContext } from "./Contexts/LocationContext";
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
-import { MovieDataContext } from "./Contexts/MovieDataContext";
 
 const MovieTable = () => {
   const [filters, setFilters] = useState({
@@ -30,16 +28,11 @@ const MovieTable = () => {
   const formToShow = useRef("");
 
   const { setLocation } = useContext(LocationContext);
-  const { allAPIData, setAllAPIData } = useContext(MovieDataContext);
 
   useEffect(() => {
     setLocation("");
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log("all data", allAPIData);
-  }, [allAPIData]);
 
   useEffect(() => {
     const modifiedData = allData.filter((movieData) => {
@@ -50,7 +43,6 @@ const MovieTable = () => {
           (dataLoc) => dataLoc.name === filters.loc
         ) !== -1;
       const isGenre = !filters.genre || movieData.genre === filters.genre;
-      console.log("is loc", isLoc);
       return isLang && isLoc && isGenre;
     });
     if (filters.sort === "Language") {
@@ -101,7 +93,7 @@ const MovieTable = () => {
     axios.get("http://localhost:4000/allMovies").then((res) => {
       setTableData(res.data);
       setAllData(res.data);
-      setAllAPIData(res.data);
+      // setAllAPIData(res.data);
     });
   };
 

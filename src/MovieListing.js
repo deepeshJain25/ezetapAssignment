@@ -25,11 +25,12 @@ const MovieListing = () => {
     <Container>
       <div className="movie-info">
         <h3>
-          Details of <b>{movieName}</b> at <b>{location}</b>
+          Details of <b style={{ color: "green" }}>{movieName}</b> at{" "}
+          <b style={{ color: "blue" }}>{location}</b>
         </h3>
         {data &&
-          data.map((data) => {
-            return <TheatreListing data={data} />;
+          data.map((data, i) => {
+            return <TheatreListing data={data} index={i} />;
           })}
       </div>
       <Button variant="secondary" onClick={() => history.goBack()}>

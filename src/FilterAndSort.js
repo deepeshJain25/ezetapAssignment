@@ -4,7 +4,6 @@ import DropDown from "./DropDown";
 
 const FilterAndSort = (props) => {
   const [filters, setFilters] = useState({});
-  console.log(props);
   const handleChange = (e, ref) => {
     setFilters((prev) => {
       return { ...prev, [ref]: e.target.value };
@@ -69,7 +68,6 @@ const FilterAndSort = (props) => {
       <div className="filter-button">
         <Button
           onClick={() => {
-            console.log(filters);
             handleApply(filters);
           }}
           variant="primary"

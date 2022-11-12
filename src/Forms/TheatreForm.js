@@ -31,7 +31,8 @@ const TheatreForm = (props) => {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            Theatre Details for {location.name || "NA"} <br />
+            Theatre details : {theatresDetails.name || "NA"}
+            <br />
             (Add Theatre details and save changes to add more Theatres)
           </Modal.Title>
         </Modal.Header>
@@ -53,7 +54,6 @@ const TheatreForm = (props) => {
             <Form.Control
               defaultValue={theatresDetails.location}
               onChange={(e) => {
-                console.log("Test !!!!!", e.target.value);
                 setTheatreData((prev) => {
                   return { ...prev, location: e.target.value };
                 });
