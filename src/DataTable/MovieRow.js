@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { LocationContext } from "./Contexts/LocationContext";
+import { LocationContext } from "../Contexts/LocationContext";
 import { Input } from "reactstrap";
 
 const MovieRow = ({ movieDetail, handleEdit }) => {
@@ -21,11 +21,6 @@ const MovieRow = ({ movieDetail, handleEdit }) => {
   const showMovie = () => {
     history.push(`/movie?${name}`);
   };
-
-  // let castString = "";
-  // cast.forEach((cast) => {
-  //   castString = cast + ", " + castString;
-  // });
 
   useEffect(() => {
     if (rowLocation !== "") {

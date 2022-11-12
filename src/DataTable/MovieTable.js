@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import MovieRow from "./MovieRow";
-import Filters from "./FilterAndSort";
-import MovieForm from "./Forms/MovieForm";
+import Filters from "../Components/FilterAndSort";
+import MovieForm from "../Forms/MovieForm";
 import { Table, Button } from "react-bootstrap";
-import { LocationContext } from "./Contexts/LocationContext";
+import { LocationContext } from "../Contexts/LocationContext";
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
 
@@ -73,7 +73,6 @@ const MovieTable = () => {
     setTableData(modifiedData);
   }, [filters]);
 
-  // const handleClose = () => setShowModal(false);
   const handleAddMovie = () => {
     formToShow.current = "add";
     setIsAddMode(true);
@@ -93,7 +92,6 @@ const MovieTable = () => {
     axios.get("http://localhost:4000/allMovies").then((res) => {
       setTableData(res.data);
       setAllData(res.data);
-      // setAllAPIData(res.data);
     });
   };
 
@@ -132,7 +130,6 @@ const MovieTable = () => {
         <MovieForm
           show={showModal}
           setShow={setShowModal}
-          // movieData={formToShow.current === "add" ? {} : movieDetails}
           movieData={movieDetails}
           fetchData={fetchData}
           addMode={isAddMode}

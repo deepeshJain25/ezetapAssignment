@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import TheatreListing from "./TheatreListing";
-import { LocationContext } from "./Contexts/LocationContext";
+import { LocationContext } from "../Contexts/LocationContext";
 import { Container, Button } from "react-bootstrap";
 import axios from "axios";
 const MovieListing = () => {

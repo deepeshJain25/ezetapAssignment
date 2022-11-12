@@ -1,6 +1,5 @@
-import "./App.css";
-import MovieTable from "./MovieTable";
-import MovieListing from "./MovieListing";
+import MovieTable from "./DataTable/MovieTable";
+import MovieListing from "./Listing/MovieListing";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useState } from "react";
 import { LocationContext } from "./Contexts/LocationContext";

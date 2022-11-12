@@ -1,11 +1,10 @@
-import React, { useRef } from "react";
+import React from "react";
 import { Input } from "reactstrap";
 
 const DropDown = (props) => {
   return (
     <Input
       onChange={(e) => props.handleChange(e, props.reference)}
-      // style={{ marginRight: "10px" }}
       type="select"
       value={props.selectedValue}
     >

@@ -19,12 +19,10 @@ const MovieForm = (props) => {
     addMode,
     setAddMode,
   } = props;
-  const locationRef = useRef("");
-  // const theatreRef = useRef("");
 
+  const locationRef = useRef("");
   const selectedTheathreDetails = useRef({});
 
-  // const movieDataRef = useRef({});
   const [movieData, setMovieData] = useState({});
   const [locations, setLocations] = useState([]);
   const [allTheatres, setAllTheatres] = useState(theatres);
@@ -36,16 +34,16 @@ const MovieForm = (props) => {
   const [showAddTheatreInput, setShowAddTheatreInput] = useState(false);
   const [allGenres, setAllGenres] = useState([]);
   const [allLocations, setAllLocations] = useState([]);
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState({});
   const [showError, setShowError] = useState({});
 
   useEffect(() => {
-    console.log("add mode", addMode);
-    if (!addMode) {
-      setMovieData(props.movieData);
-    } else {
-      setMovieData({});
-    }
+    // if (!addMode) {
+    //   setMovieData(props.movieData);
+    // } else {
+    //   setMovieData({});
+    // }
+    setMovieData(props.movieData);
     setAllTheatres(theatres);
     setLocations(movieLocations);
   }, [props]);
@@ -160,9 +158,14 @@ const MovieForm = (props) => {
       .post(`http://localhost:4000/updateMovie/${id}`, data)
       .then((res) => {
         console.log(res);
-        setShowSuccessMessage(true);
+        setShowSuccessMessage({
+          show: true,
+          message: "Update Successful",
+        });
         setTimeout(() => {
-          setShowSuccessMessage(false);
+          setShowSuccessMessage({
+            show: false,
+          });
           closeModal();
         }, 3000);
       })
@@ -180,18 +183,21 @@ const MovieForm = (props) => {
       .post(`http://localhost:4000/addMovie`, data)
       .then((res) => {
         console.log(res);
-        // setShowSuccessMessage(true);
-        // setTimeout(() => {
-        //   setShowSuccessMessage(false);
-        //   closeModal();
-        // }, 3000);
+        setShowSuccessMessage({
+          show: true,
+          message: "Successfully added movie",
+        });
+        setTimeout(() => {
+          setShowSuccessMessage({ show: false });
+          closeModal();
+        }, 3000);
       })
       .catch((e) => {
         console.log(e);
-        // setShowError({ show: true, message: e.message });
-        // setTimeout(() => {
-        //   setShowError({ show: false });
-        // }, 5000);
+        setShowError({ show: true, message: e.message });
+        setTimeout(() => {
+          setShowError({ show: false });
+        }, 5000);
       });
   };
 
@@ -368,9 +374,9 @@ const MovieForm = (props) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          {showSuccessMessage ? (
+          {showSuccessMessage.show ? (
             <p style={{ color: "green", marginRight: "50px" }}>
-              Saved Successfully
+              {showSuccessMessage.message}
             </p>
           ) : null}
           {showError.show ? (
