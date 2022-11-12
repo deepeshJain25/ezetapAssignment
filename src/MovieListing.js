@@ -1,25 +1,34 @@
-import React, { useCallback, useContext } from "react";
-import { data } from "./Data";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import TheatreListing from "./TheatreListing";
 import { LocationContext } from "./Contexts/LocationContext";
 import { Container, Button } from "react-bootstrap";
-
+import axios from "axios";
 const MovieListing = () => {
   const history = useHistory();
   const { location } = useContext(LocationContext);
+  const [data, setData] = useState([]);
   const movieName = history.location.search.slice(1);
-  const theatreData = data.find((listing) => listing.name === movieName)
-    .theatres[location];
+
+  useEffect(() => {
+    axios.get("http://localhost:4000/allMovies").then((res) => {
+      const movieData = res.data.find((listing) => listing.name === movieName);
+      const locationId = movieData.location.find(
+        (loc) => loc.name === location
+      ).id;
+      const theatreData = movieData.theatres[locationId];
+      setData(theatreData);
+    });
+  }, []);
 
   return (
     <Container>
       <div className="movie-info">
-        <h2>
-          Name of movie: {movieName} at {location}
-        </h2>
-        {theatreData &&
-          theatreData.map((data) => {
+        <h3>
+          Details of <b>{movieName}</b> at <b>{location}</b>
+        </h3>
+        {data &&
+          data.map((data) => {
             return <TheatreListing data={data} />;
           })}
       </div>

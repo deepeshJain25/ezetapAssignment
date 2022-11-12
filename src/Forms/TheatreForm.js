@@ -9,18 +9,15 @@ const TheatreForm = (props) => {
     handleTheatres = () => {},
     theatresDetails = {},
   } = props;
-  console.log("Theathre form", theatresDetails);
   const [theatreData, setTheatreData] = useState(theatresDetails || {});
 
   const onSaveClick = () => {
     const clone = { ...theatreData };
-    handleTheatres(clone);
+    handleTheatres(clone, location.id);
     handleClose();
-    console.log("Theathre Data !!", theatreData);
   };
 
   useEffect(() => {
-    console.log("!!");
     setTheatreData(theatresDetails);
   }, [theatresDetails]);
 

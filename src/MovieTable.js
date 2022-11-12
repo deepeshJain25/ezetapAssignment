@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { data } from "./Data";
 import MovieRow from "./MovieRow";
 import Filters from "./FilterAndSort";
@@ -7,6 +7,7 @@ import { Table, Button } from "react-bootstrap";
 import { LocationContext } from "./Contexts/LocationContext";
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
+import { MovieDataContext } from "./Contexts/MovieDataContext";
 
 const MovieTable = () => {
   const [filters, setFilters] = useState({
@@ -16,26 +17,40 @@ const MovieTable = () => {
     sort: "",
   });
 
-  const [tableData, setTableData] = useState(data);
+  const [tableData, setTableData] = useState([]);
+
+  const [allData, setAllData] = useState([]);
 
   const [movieDetails, setMovieDetails] = useState({});
 
   const [showModal, setShowModal] = useState(false);
 
-  const [populateData, setPopulateData] = useState(false);
+  const [isAddMode, setIsAddMode] = useState(false);
+
+  const formToShow = useRef("");
 
   const { setLocation } = useContext(LocationContext);
+  const { allAPIData, setAllAPIData } = useContext(MovieDataContext);
 
   useEffect(() => {
     setLocation("");
+    fetchData();
   }, []);
 
   useEffect(() => {
-    const modifiedData = data.filter((movieData) => {
-      const isLang = !filters.lang || movieData.language === filters.lang;
-      const isLoc = !filters.loc || movieData.locations.includes(filters.loc);
-      const isGenre = !filters.genre || movieData.genre === filters.genre;
+    console.log("all data", allAPIData);
+  }, [allAPIData]);
 
+  useEffect(() => {
+    const modifiedData = allData.filter((movieData) => {
+      const isLang = !filters.lang || movieData.language === filters.lang;
+      const isLoc =
+        !filters.loc ||
+        movieData.location.findIndex(
+          (dataLoc) => dataLoc.name === filters.loc
+        ) !== -1;
+      const isGenre = !filters.genre || movieData.genre === filters.genre;
+      console.log("is loc", isLoc);
       return isLang && isLoc && isGenre;
     });
     if (filters.sort === "Language") {
@@ -66,15 +81,28 @@ const MovieTable = () => {
     setTableData(modifiedData);
   }, [filters]);
 
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
+  // const handleClose = () => setShowModal(false);
+  const handleAddMovie = () => {
+    formToShow.current = "add";
+    setIsAddMode(true);
+    setShowModal(true);
+  };
 
   const handleEdit = (movieName) => {
     const rowData = tableData.find((movie) => {
       return movie.name === movieName;
     });
+    formToShow.current = "edit";
     setMovieDetails(rowData);
     setShowModal(true);
+  };
+
+  const fetchData = () => {
+    axios.get("http://localhost:4000/allMovies").then((res) => {
+      setTableData(res.data);
+      setAllData(res.data);
+      setAllAPIData(res.data);
+    });
   };
 
   return (
@@ -86,9 +114,9 @@ const MovieTable = () => {
           </Col>
         </Row>
         <Filters
-          locs={extractAllData(data, "locations")}
-          genres={extractAllData(data, "genre")}
-          langs={extractAllData(data, "language")}
+          locs={extractAllLocs(allData)}
+          genres={extractAllData(allData, "genre")}
+          langs={extractAllData(allData, "language")}
           handleFilters={setFilters}
         />
         <Table bordered hover className="movie-table">
@@ -108,11 +136,15 @@ const MovieTable = () => {
             ))}
           </tbody>
         </Table>
-        <Button onClick={() => handleShow()}>Add Movie</Button>
+        <Button onClick={() => handleAddMovie()}>Add Movie</Button>
         <MovieForm
           show={showModal}
           setShow={setShowModal}
+          // movieData={formToShow.current === "add" ? {} : movieDetails}
           movieData={movieDetails}
+          fetchData={fetchData}
+          addMode={isAddMode}
+          setAddMode={setIsAddMode}
         />
       </Container>
     </div>
@@ -127,15 +159,28 @@ const extractAllData = (data, param) => {
     const array = data[param];
     if (Array.isArray(array)) {
       array.forEach((data) => {
-        result.push(data);
+        if (!result.includes(data)) {
+          result.push(data);
+        }
       });
     } else {
-      result.push(array);
+      if (!result.includes(array)) {
+        result.push(array);
+      }
     }
   });
   return result;
 };
 
-// await axios.get("http://localhost:4000/movies").then((res) => {
-//   setTableData(res.data.data);
-// });
+const extractAllLocs = (data) => {
+  const result = [];
+  data.forEach((data) => {
+    data.location &&
+      data.location.forEach((loc) => {
+        if (!result.includes(loc.name)) {
+          result.push(loc.name);
+        }
+      });
+  });
+  return result;
+};

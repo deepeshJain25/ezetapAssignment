@@ -4,7 +4,7 @@ import DropDown from "./DropDown";
 
 const FilterAndSort = (props) => {
   const [filters, setFilters] = useState({});
-
+  console.log(props);
   const handleChange = (e, ref) => {
     setFilters((prev) => {
       return { ...prev, [ref]: e.target.value };

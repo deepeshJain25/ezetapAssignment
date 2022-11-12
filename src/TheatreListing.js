@@ -1,20 +1,22 @@
 import React from "react";
 
-const TheatreListing = (props) => {
+const TheatreListing = ({
+  data: { name = "", location = "", price = "", shows = "" },
+}) => {
   return (
     <div className="movie-flex">
       <p>
         <b>
-          {props.data.name}
+          {name}
           {", "}
-          {props.data.location}
+          {location}
         </b>
       </p>
       <p>
-        {props.data.price}
+        {price}
         {"Rs."}
       </p>
-      {props.data.shows.map((showTiming) => {
+      {shows.split(",").map((showTiming) => {
         return (
           <div
             style={{
@@ -22,6 +24,7 @@ const TheatreListing = (props) => {
               width: "100px",
               border: "solid 2px",
               margin: "10px",
+              borderRadius: "10px",
             }}
           >
             <p>{showTiming}</p>

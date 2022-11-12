@@ -6,16 +6,16 @@ export const data = [
     genre: "Action/Sci-fi",
     locations: ["Delhi", "Chandigarh", "Bangalore"],
     location: [
-      { id: 100, name: "Delhi" },
-      { id: 101, name: "Chandigarh" },
-      { id: 102, name: "Bangalore" },
+      { id: 1, name: "Delhi" },
+      { id: 2, name: "Chandigarh" },
+      { id: 3, name: "Bangalore" },
     ],
     theatres: {
-      100: [
+      1: [
         {
           name: "PVR 1",
           location: "test loc 1",
-          price: 100,
+          price: 1,
           shows: "10:00,12:00,17:00",
         },
         {
@@ -31,11 +31,11 @@ export const data = [
           shows: "10:00,12:00,17:00",
         },
       ],
-      101: [
+      2: [
         {
           name: "IMAX 1",
           location: "test loc 1",
-          price: 100,
+          price: 1,
           shows: "10:00,12:00,17:00",
         },
         {
@@ -45,7 +45,7 @@ export const data = [
           shows: "10:00,12:00,17:00",
         },
       ],
-      102: [
+      3: [
         {
           name: "PVR 6",
           location: "test loc 2",
@@ -62,16 +62,16 @@ export const data = [
     genre: "Action/Sci-fi",
     locations: ["Delhi", "Chandigarh", "Bangalore"],
     location: [
-      { id: 100, name: "Delhi" },
-      { id: 101, name: "Chandigarh" },
-      { id: 102, name: "Bangalore" },
+      { id: 1, name: "Delhi" },
+      { id: 2, name: "Chandigarh" },
+      { id: 3, name: "Bangalore" },
     ],
     theatres: {
-      100: [
+      1: [
         {
           name: "PVR 1",
           location: "test loc 1",
-          price: 100,
+          price: 1,
           shows: "10:00,12:00,17:00",
         },
         {
@@ -87,11 +87,11 @@ export const data = [
           shows: "10:00,12:00,17:00",
         },
       ],
-      101: [
+      2: [
         {
           name: "IMAX 1",
           location: "test loc 1",
-          price: 100,
+          price: 1,
           shows: "10:00,12:00,17:00",
         },
         {
@@ -101,7 +101,7 @@ export const data = [
           shows: "10:00,12:00,17:00",
         },
       ],
-      102: [
+      3: [
         {
           name: "PVR 6",
           location: "test loc 2",
@@ -118,16 +118,16 @@ export const data = [
     genre: "Action/Sci-fi",
     locations: ["Delhi", "Chandigarh", "Bangalore"],
     location: [
-      { id: 100, name: "Delhi" },
-      { id: 101, name: "Chandigarh" },
-      { id: 102, name: "Bangalore" },
+      { id: 1, name: "Delhi" },
+      { id: 2, name: "Chandigarh" },
+      { id: 3, name: "Bangalore" },
     ],
     theatres: {
-      100: [
+      1: [
         {
           name: "PVR 1",
           location: "test loc 1",
-          price: 100,
+          price: 1,
           shows: "10:00,12:00,17:00",
         },
         {
@@ -143,11 +143,11 @@ export const data = [
           shows: "10:00,12:00,17:00",
         },
       ],
-      101: [
+      2: [
         {
           name: "IMAX 1",
           location: "test loc 1",
-          price: 100,
+          price: 1,
           shows: "10:00,12:00,17:00",
         },
         {
@@ -157,7 +157,7 @@ export const data = [
           shows: "10:00,12:00,17:00",
         },
       ],
-      102: [
+      3: [
         {
           name: "PVR 6",
           location: "test loc 2",

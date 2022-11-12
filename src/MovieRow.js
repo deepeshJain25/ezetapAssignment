@@ -8,10 +8,10 @@ const MovieRow = ({ movieDetail, handleEdit }) => {
   const history = useHistory();
   const {
     name = "",
-    cast = [],
+    cast = "",
     genre = "",
     language = "",
-    locations = [],
+    location = [],
   } = movieDetail;
   const [showButton, setShowButton] = useState(false);
   const [rowLocation, setRowLocation] = useState("");
@@ -22,10 +22,10 @@ const MovieRow = ({ movieDetail, handleEdit }) => {
     history.push(`/movie?${name}`);
   };
 
-  let castString = "";
-  cast.forEach((cast) => {
-    castString = cast + ", " + castString;
-  });
+  // let castString = "";
+  // cast.forEach((cast) => {
+  //   castString = cast + ", " + castString;
+  // });
 
   useEffect(() => {
     if (rowLocation !== "") {
@@ -39,7 +39,7 @@ const MovieRow = ({ movieDetail, handleEdit }) => {
   return (
     <tr>
       <td>{name}</td>
-      <td>{castString}</td>
+      <td>{cast}</td>
       <td>{language}</td>
       <td>{genre}</td>
       <td>
@@ -50,8 +50,8 @@ const MovieRow = ({ movieDetail, handleEdit }) => {
           }}
         >
           <option value={""}>Select a Location</option>
-          {locations.map((loc) => (
-            <option value={loc}>{loc}</option>
+          {location.map((loc) => (
+            <option value={loc.name}>{loc.name}</option>
           ))}
         </Input>
       </td>
