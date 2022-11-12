@@ -4,28 +4,29 @@ import { Button } from "react-bootstrap";
 import { LocationContext } from "./Contexts/LocationContext";
 import { Input } from "reactstrap";
 
-const MovieRow = (props) => {
+const MovieRow = ({movieDetail, handleEdit}) => {
   const history = useHistory();
-
+  console.log('Movie Detail', movieDetail);
+  const {name = '', cast = [], genre = '', language = '', locations = []} = movieDetail
   const { setLocation } = useContext(LocationContext);
   const showMovie = () => {
-    history.push(`/movie?${props.name}`);
+    history.push(`/movie?${ name}`);
   };
 
   let castString = "";
-  props.cast.forEach((cast) => {
+   cast.forEach((cast) => {
     castString = cast + ", " + castString;
   });
 
   return (
     <tr>
-      <td>{props.name}</td>
+      <td>{name}</td>
       <td>{castString}</td>
-      <td>{props.lang}</td>
-      <td>{props.genre}</td>
+      <td>{language}</td>
+      <td>{genre}</td>
       <td>
         <Input type="select" onChange={(e) => setLocation(e.target.value)}>
-          {props.locations.map((loc) => (
+          { locations.map((loc) => (
             <option>{loc}</option>
           ))}
         </Input>
@@ -38,7 +39,7 @@ const MovieRow = (props) => {
           View Details
         </Button>
         <Button
-          onClick={() => props.handleEdit(props.name)}
+          onClick={() => handleEdit(name)}
           variant="info"
           style={{ marginRight: "12px", padding: "10px 22px" }}
         >

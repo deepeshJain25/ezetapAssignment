@@ -77,6 +77,7 @@ const MovieTable = () => {
     const rowData = tableData.find((movie) => {
       return movie.name === movieName;
     });
+    console.log('Row Data', rowData);
     setMovieDetails(rowData);
     setPopulateData(true);
     setShowModal(true);
@@ -110,11 +111,7 @@ const MovieTable = () => {
           <tbody>
             {tableData.map((movie) => (
               <MovieRow
-                name={movie.name}
-                cast={movie.cast}
-                lang={movie.language}
-                genre={movie.genre}
-                locations={movie.locations}
+                movieDetail={movie}
                 handleEdit={handleEdit}
               />
             ))}
