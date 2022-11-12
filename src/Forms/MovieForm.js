@@ -1,26 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import TheatreForm from "./TheatreForm";
-import '../style/movie-form.scss'
+import "../style/movie-form.scss";
 
 const MovieForm = (props) => {
-  console.log('props !!', props);
-  const { movieData: { genre = '', name = '', language = '', cast = '', theatres = {}, location: movieLocations = [] } = {} } = props;
-  console.log('Movie Data --', props);
+  console.log("props !!", props);
+  const {
+    movieData: {
+      genre = "",
+      name = "",
+      language = "",
+      cast = "",
+      theatres = {},
+      location: movieLocations = [],
+    } = {},
+  } = props;
+  console.log("Movie Data --", props);
   const locationRef = useRef("");
   const selectedTheathreDetails = useRef({});
 
-  const movieDataRef = useRef({
+  // const movieDataRef = useRef({});
 
-  });
+  const [movieData, setMovieData] = useState({});
+  const [locations, setLocations] = useState(movieLocations);
+  const [selectedTheatres, setSelectedTheatres] = useState(theatres);
 
-  const [movieData, setMovieData] = useState({
-
-  });
-  const [locations, setLocations] = useState([]);
   const [showTheatreModal, setShowTheatreModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({});
-
 
   useEffect(() => {
     setMovieData((prev) => {
@@ -28,11 +34,19 @@ const MovieForm = (props) => {
     });
   }, [locations]);
 
+  useEffect(() => {
+    setLocations(movieLocations);
+  }, [movieLocations]);
+
+  useEffect(() => {
+    setSelectedTheatres(theatres);
+  }, [theatres]);
+
   const handleClose = () => setShowTheatreModal(false);
 
   const closeModal = () => {
     props.setShow(false);
-    setLocations([]);
+    // setLocations([]);
   };
 
   const handleShow = (loc) => {
@@ -41,10 +55,19 @@ const MovieForm = (props) => {
   };
 
   const handleLocations = () => {
+    // setLocations((prev) => {
+    //   const addedLocs = [...prev, locationRef.current];
+    //   movieDataRef.current.locations = addedLocs;
+    //   return addedLocs;
+    // });
     setLocations((prev) => {
-      const addedLocs = [...prev, locationRef.current];
-      movieDataRef.current.locations = addedLocs;
-      return addedLocs;
+      console.log(prev);
+      const newLocationObject = {
+        id: prev.length + 100,
+        name: locationRef.current,
+      };
+      const newLocs = [...prev, newLocationObject];
+      return newLocs;
     });
   };
 
@@ -63,13 +86,15 @@ const MovieForm = (props) => {
   };
 
   const onLocationSelect = (locationDetail) => {
-    console.log('Inside onlocationselect', locationDetail);
-      setSelectedLocation(locationDetail);
-  }
+    console.log("Inside onlocationselect", locationDetail);
+    setSelectedLocation(locationDetail);
+  };
 
   const getLocationClass = (id) => {
-    return id === selectedLocation.id ? 'location-name location-name-selected' : 'location-name';
-  }
+    return id === selectedLocation.id
+      ? "location-name location-name-selected"
+      : "location-name";
+  };
 
   return (
     <div>
@@ -82,7 +107,7 @@ const MovieForm = (props) => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Name of Movie</Form.Label>
               <Form.Control
-                defaultValue={name || ''}
+                defaultValue={name || ""}
                 onChange={(e) => {
                   setMovieData((prev) => {
                     return { ...prev, name: e.target.value };
@@ -94,7 +119,7 @@ const MovieForm = (props) => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Language</Form.Label>
               <Form.Control
-                defaultValue={language || ''}
+                defaultValue={language || ""}
                 onChange={(e) => {
                   setMovieData((prev) => {
                     return { ...prev, language: e.target.value };
@@ -106,7 +131,7 @@ const MovieForm = (props) => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Cast (Add names separated by Commas)</Form.Label>
               <Form.Control
-              defaultValue={cast || ''}
+                defaultValue={cast || ""}
                 onChange={(e) => {
                   setMovieData((prev) => {
                     return { ...prev, cast: e.target.value };
@@ -118,7 +143,7 @@ const MovieForm = (props) => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Genre</Form.Label>
               <Form.Select
-              defaultValue={'1'}
+                defaultValue={genre || "1"}
                 onChange={(e) => {
                   setMovieData((prev) => {
                     return { ...prev, genre: e.target.value };
@@ -132,38 +157,52 @@ const MovieForm = (props) => {
               </Form.Select>
             </Form.Group>
             Locations: <br />
-            {console.log('Locations ------>', movieLocations)}
-            {movieLocations.map((loc) => <div onClick={() => onLocationSelect(loc)} className={getLocationClass(loc.id)}>{loc.name}</div>)}
-            {/* <Button className="add-locations" onClick={handleLocations} variant="secondary">
-                  Add More Locations
-            </Button> */}
-            {/* <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Current Locations</Form.Label>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <div style={{ display: "flex" }}>
                 <Form.Select
                   onChange={(e) => {
                     locationRef.current = e.target.value;
-                    setSelectedLocation('a3');
-                    console.log('Selected Location', e.target.value);
+                    console.log("Selected Location", e.target.value);
                   }}
                 >
-                  <option></option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Chennai">Chennai</option>
                 </Form.Select>
               </div>
-            </Form.Group> */}
+            </Form.Group>
+            <Button
+              className="add-locations"
+              onClick={handleLocations}
+              variant="secondary"
+            >
+              Add Location
+            </Button>
+            <br />
+            <br />
+            {console.log("Locations ------>", locations)}
+            {locations.map((loc) => (
+              <div
+                onClick={() => onLocationSelect(loc)}
+                className={getLocationClass(loc.id)}
+              >
+                {loc.name}
+              </div>
+            ))}
             <br />
             <h6>Theathre Details:</h6>
             <br />
-            {!theatres[selectedLocation.id] && <p>Please select the locations to see the details</p>}
-            {theatres[selectedLocation.id] && theatres[selectedLocation.id].map((theatreDetail) => {
+            {console.log("theatres=======> ", selectedTheatres)}
+            {!selectedTheatres[selectedLocation.id] && (
+              <p>Please select the locations to see the details</p>
+            )}
+            {selectedTheatres[selectedLocation.id] &&
+              selectedTheatres[selectedLocation.id].map((theatreDetail) => {
                 return (
                   <div style={{ display: "flex" }}>
-                    <p style={{marginRight: '10px'}}>{theatreDetail.name}</p>
+                    <p style={{ marginRight: "10px" }}>{theatreDetail.name}</p>
                     <Button
-                    style={{marginRight: '10px'}}
+                      style={{ marginRight: "10px" }}
                       size="sm"
                       onClick={() => handleShow(theatreDetail)}
                       variant="secondary"
