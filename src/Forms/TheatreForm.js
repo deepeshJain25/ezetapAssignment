@@ -73,6 +73,7 @@ const TheatreForm = (props) => {
             variant="primary"
             onClick={() => {
               console.log(theatreData);
+              props.handleTheatres(theatreData, props.location);
             }}
           >
             Save Changes

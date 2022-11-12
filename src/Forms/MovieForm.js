@@ -7,27 +7,44 @@ const MovieForm = (props) => {
   const theatreLocRef = useRef("");
 
   const movieDataRef = useRef({
-    name: props.movieData.name || "",
-    cast: props.movieData.cast || "",
-    language: props.movieData.language || "",
-    genre: props.movieData.genre || "",
-    locations: props.movieData.locations || [],
+    // name: props.movieData.name || "",
+    // cast: props.movieData.cast || "",
+    // language: props.movieData.language || "",
+    // genre: props.movieData.genre || "",
+    // locations: props.movieData.locations || [],
   });
-  // const [movieData, setMovieData] = useState({
-  //   name: props.movieData.name || "",
-  //   cast: props.movieData.cast || "",
-  //   language: props.movieData.language || "",
-  //   genre: props.movieData.genre || "",
-  //   locations: props.movieData.locations || [],
-  // });
 
-  // console.log(movieDataRef.current);
+  const [movieData, setMovieData] = useState({
+    // name: props.movieData.name || "",
+    // cast: props.movieData.cast || "",
+    // language: props.movieData.language || "",
+    // genre: props.movieData.genre || "",
+    // locations: props.movieData.locations || [],
+  });
   const [locations, setLocations] = useState([]);
   const [showTheatreModal, setShowTheatreModal] = useState(false);
 
+  // useEffect(() => {
+  //   console.log(props.populateData);
+  //   if (props.populateData) {
+  //     setMovieData({
+  //       name: props.movieData.name,
+  //       cast: props.movieData.cast,
+  //       language: props.movieData.language,
+  //       genre: props.movieData.genre,
+  //       locations: props.movieData.locations,
+  //     });
+  //   }
+  // }, []);
+  useEffect(() => {
+    setMovieData((prev) => {
+      return { ...prev, locations: locations };
+    });
+  }, [locations]);
+
   const handleClose = () => setShowTheatreModal(false);
 
-  console.log(props.movieData);
+  // console.log(props.movieData);
 
   const closeModal = () => {
     props.setShow(false);
@@ -50,6 +67,17 @@ const MovieForm = (props) => {
   const clearLocation = (loc) => {
     setLocations((prev) => prev.filter((addedLoc) => !(addedLoc === loc)));
   };
+
+  const handleTheatres = (data, location) => {
+    if (Array.isArray(movieData.theatres[location])) {
+      movieData.theatres[location].push(data);
+    } else {
+      movieData.theatres[location] = [];
+      movieData.theatres[location].push(data);
+    }
+    console.log(movieData);
+  };
+
   return (
     <div>
       <Modal show={props.show} onHide={closeModal} backdrop="static">
@@ -62,34 +90,44 @@ const MovieForm = (props) => {
               <Form.Label>Name of Movie</Form.Label>
               <Form.Control
                 onChange={(e) => {
-                  movieDataRef.current.name = e.target.value;
+                  // movieDataRef.current.name = e.target.value;
+                  setMovieData((prev) => {
+                    return { ...prev, name: e.target.value };
+                  });
                 }}
-                value={movieDataRef.current.name}
+                value={movieData.name}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Language</Form.Label>
               <Form.Control
                 onChange={(e) => {
-                  movieDataRef.current.language = e.target.value;
+                  setMovieData((prev) => {
+                    return { ...prev, language: e.target.value };
+                  });
                 }}
-                value={movieDataRef.current.language}
+                value={movieData.language}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Cast (Add names separated by Commas)</Form.Label>
               <Form.Control
                 onChange={(e) => {
-                  movieDataRef.current.cast = e.target.value;
+                  setMovieData((prev) => {
+                    return { ...prev, cast: e.target.value };
+                  });
                 }}
-                value={movieDataRef.current.cast}
+                value={movieData.cast}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Genre</Form.Label>
               <Form.Select
                 onChange={(e) => {
-                  movieDataRef.current.genre = e.target.value;
+                  // movieDataRef.current.genre = e.target.value;
+                  setMovieData((prev) => {
+                    return { ...prev, genre: e.target.value };
+                  });
                 }}
               >
                 <option>Open this select menu</option>
@@ -143,7 +181,7 @@ const MovieForm = (props) => {
           <Button
             variant="primary"
             onClick={() => {
-              console.log(movieDataRef.current);
+              console.log(movieData);
             }}
           >
             Save Changes
@@ -154,6 +192,7 @@ const MovieForm = (props) => {
         showTheatreModal={showTheatreModal}
         handleClose={handleClose}
         location={theatreLocRef.current}
+        handleTheatres={handleTheatres}
       />
     </div>
   );

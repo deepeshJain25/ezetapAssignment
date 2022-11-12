@@ -5,6 +5,7 @@ import Filters from "./FilterAndSort";
 import MovieForm from "./Forms/MovieForm";
 import { Table, Button } from "react-bootstrap";
 import { LocationContext } from "./Contexts/LocationContext";
+import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
 
 const MovieTable = () => {
@@ -21,10 +22,16 @@ const MovieTable = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+  const [populateData, setPopulateData] = useState(false);
+
   const { setLocation } = useContext(LocationContext);
 
-  useEffect(async () => {
+  useEffect(() => {
     setLocation("");
+    console.log("fetcth movies");
+    axios
+      .get("http://localhost:4000/allMovies")
+      .then((res) => console.log(res.data));
   }, []);
 
   useEffect(() => {
@@ -66,49 +73,61 @@ const MovieTable = () => {
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
-  const handleEdit = (data) => {
-    setMovieDetails(data);
+  const handleEdit = (movieName) => {
+    const rowData = tableData.find((movie) => {
+      return movie.name === movieName;
+    });
+    setMovieDetails(rowData);
+    setPopulateData(true);
     setShowModal(true);
   };
 
   return (
-    <div>
-      <Filters
-        locs={extractAllData(data, "locations")}
-        genres={extractAllData(data, "genre")}
-        langs={extractAllData(data, "language")}
-        handleFilters={setFilters}
-      />
-      <Table bordered hover>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Cast</th>
-            <th>Language</th>
-            <th>Genre</th>
-            <th>Locations</th>
-            <th>Details</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tableData.map((movie) => (
-            <MovieRow
-              name={movie.name}
-              cast={movie.cast}
-              lang={movie.language}
-              genre={movie.genre}
-              locations={movie.locations}
-              handleEdit={handleEdit}
-            />
-          ))}
-        </tbody>
-      </Table>
-      <Button onClick={() => handleShow()}>Add Movie</Button>
-      <MovieForm
-        show={showModal}
-        setShow={setShowModal}
-        movieData={movieDetails}
-      />
+    <div className="movie-wrapper">
+      <Container>
+        <Row>
+          <Col md={12} lg={12} xl={12}>
+            <h1 className="title">The Movie Website</h1>
+          </Col>
+        </Row>
+        <Filters
+          locs={extractAllData(data, "locations")}
+          genres={extractAllData(data, "genre")}
+          langs={extractAllData(data, "language")}
+          handleFilters={setFilters}
+        />
+        <Table bordered hover striped className="movie-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Cast</th>
+              <th>Language</th>
+              <th>Genre</th>
+              <th>Locations</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableData.map((movie) => (
+              <MovieRow
+                name={movie.name}
+                cast={movie.cast}
+                lang={movie.language}
+                genre={movie.genre}
+                locations={movie.locations}
+                handleEdit={handleEdit}
+              />
+            ))}
+          </tbody>
+        </Table>
+        <Button onClick={() => handleShow()}>Add Movie</Button>
+        <MovieForm
+          show={showModal}
+          setShow={setShowModal}
+          movieData={movieDetails}
+          populateData={populateData}
+        />
+      </Container>
     </div>
   );
 };

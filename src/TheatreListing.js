@@ -2,7 +2,7 @@ import React from "react";
 
 const TheatreListing = (props) => {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="movie-flex">
       <p>
         <b>
           {props.data.name}
