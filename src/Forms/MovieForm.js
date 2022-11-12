@@ -20,9 +20,11 @@ const MovieForm = (props) => {
     setAddMode,
   } = props;
 
+  // refs //
   const locationRef = useRef("");
   const selectedTheathreDetails = useRef({});
 
+  // states //
   const [movieData, setMovieData] = useState({});
   const [locations, setLocations] = useState([]);
   const [allTheatres, setAllTheatres] = useState(theatres);
@@ -37,6 +39,7 @@ const MovieForm = (props) => {
   const [showSuccessMessage, setShowSuccessMessage] = useState({});
   const [showError, setShowError] = useState({});
 
+  // set states with initial values from props //
   useEffect(() => {
     // if (!addMode) {
     //   setMovieData(props.movieData);
@@ -48,6 +51,7 @@ const MovieForm = (props) => {
     setLocations(movieLocations);
   }, [props]);
 
+  // fetch all genres and locations to show in dropdowns //
   useEffect(() => {
     axios.get("http://localhost:4000/allGenres").then((res) => {
       setAllGenres(res.data);
@@ -57,19 +61,23 @@ const MovieForm = (props) => {
     });
   }, []);
 
+  // to close theatre modal //
   const handleClose = () => setShowTheatreModal(false);
 
+  // to close movie modal //
   const closeModal = () => {
     props.setShow(false);
     fetchData();
     setAddMode(false);
   };
 
+  // to add details of theatres for a location //
   const handleShow = (loc) => {
     selectedTheathreDetails.current = loc;
     setShowTheatreModal(true);
   };
 
+  // to add locations //
   const handleLocations = () => {
     setLocations((prev) => {
       if (
@@ -93,6 +101,7 @@ const MovieForm = (props) => {
     setLocations((prev) => prev.filter((addedLoc) => !(addedLoc === loc)));
   };
 
+  // to delete a theatre //
   const clearTheatre = (theatreData) => {
     const selectedLocationTheatres = allTheatres[selectedLocation.id];
     const newTheatreData = selectedLocationTheatres.filter(
@@ -108,6 +117,7 @@ const MovieForm = (props) => {
     });
   };
 
+  // to save theatre details //
   const handleTheatres = (data, locationId) => {
     const indexOfTheatre = movieData.theatres[locationId].findIndex((th) => {
       return th.name === data.name;
@@ -118,6 +128,7 @@ const MovieForm = (props) => {
     });
   };
 
+  // to add theatres //
   const addTheatres = (locationId, name) => {
     setAllTheatres((prev) => {
       const clone = { ...prev };
@@ -153,6 +164,7 @@ const MovieForm = (props) => {
       : "location-name";
   };
 
+  // to update db with new movie details //
   const updateDb = (data, id) => {
     axios
       .post(`http://localhost:4000/updateMovie/${id}`, data)
@@ -178,6 +190,7 @@ const MovieForm = (props) => {
       });
   };
 
+  // to add new movie to db //
   const addToDb = (data) => {
     axios
       .post(`http://localhost:4000/addMovie`, data)

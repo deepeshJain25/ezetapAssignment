@@ -25,15 +25,15 @@ const MovieTable = () => {
 
   const [isAddMode, setIsAddMode] = useState(false);
 
-  const formToShow = useRef("");
-
   const { setLocation } = useContext(LocationContext);
 
+  // initial fetch of data //
   useEffect(() => {
     setLocation("");
     fetchData();
   }, []);
 
+  // applying filters to table data //
   useEffect(() => {
     const modifiedData = allData.filter((movieData) => {
       const isLang = !filters.lang || movieData.language === filters.lang;
@@ -73,21 +73,22 @@ const MovieTable = () => {
     setTableData(modifiedData);
   }, [filters]);
 
+  // opens add movie modal //
   const handleAddMovie = () => {
-    formToShow.current = "add";
     setIsAddMode(true);
     setShowModal(true);
   };
 
+  //opens edit movie modal //
   const handleEdit = (movieName) => {
     const rowData = tableData.find((movie) => {
       return movie.name === movieName;
     });
-    formToShow.current = "edit";
     setMovieDetails(rowData);
     setShowModal(true);
   };
 
+  // fetch all data api //
   const fetchData = () => {
     axios.get("http://localhost:4000/allMovies").then((res) => {
       setTableData(res.data);
@@ -141,6 +142,8 @@ const MovieTable = () => {
 };
 
 export default MovieTable;
+
+// utils for this file //
 
 const extractAllData = (data, param) => {
   const result = [];

@@ -10,6 +10,7 @@ const MovieListing = () => {
   const [data, setData] = useState([]);
   const movieName = history.location.search.slice(1);
 
+  // to fetch theatre details from api //
   useEffect(() => {
     axios.get("http://localhost:4000/allMovies").then((res) => {
       const movieData = res.data.find((listing) => listing.name === movieName);

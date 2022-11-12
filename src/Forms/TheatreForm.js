@@ -11,12 +11,14 @@ const TheatreForm = (props) => {
   } = props;
   const [theatreData, setTheatreData] = useState(theatresDetails || {});
 
+  // to save theatre info //
   const onSaveClick = () => {
     const clone = { ...theatreData };
     handleTheatres(clone, location.id);
     handleClose();
   };
 
+  // to set state with initial value from props //
   useEffect(() => {
     setTheatreData(theatresDetails);
   }, [theatresDetails]);
