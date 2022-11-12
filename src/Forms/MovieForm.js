@@ -28,19 +28,25 @@ const MovieForm = (props) => {
   const [showTheatreModal, setShowTheatreModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({});
 
+  console.log("!@#$%^&*");
+
   useEffect(() => {
     setMovieData((prev) => {
       return { ...prev, locations: locations };
     });
   }, [locations]);
 
-  useEffect(() => {
-    setLocations(movieLocations);
-  }, []);
+  // useEffect(() => {
+  //   setLocations(movieLocations);
+  // }, []);
 
   useEffect(() => {
     setAllTheatres(theatres);
   }, []);
+
+  useEffect(() => {
+    setMovieData(props.movieData);
+  }, [props.movieData]);
 
   const handleClose = () => setShowTheatreModal(false);
 
@@ -242,7 +248,7 @@ const MovieForm = (props) => {
           <Button
             variant="primary"
             onClick={() => {
-              console.log(movieData);
+              console.log("########", movieData);
             }}
           >
             Save Changes

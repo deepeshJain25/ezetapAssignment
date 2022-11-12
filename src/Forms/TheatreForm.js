@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
 const TheatreForm = (props) => {
@@ -9,7 +9,20 @@ const TheatreForm = (props) => {
     handleTheatres = () => {},
     theatresDetails = {},
   } = props;
-  const [theatreData, setTheatreData] = useState({});
+  console.log("Theathre form", theatresDetails);
+  const [theatreData, setTheatreData] = useState(theatresDetails || {});
+
+  const onSaveClick = () => {
+    const clone = { ...theatreData };
+    handleTheatres(clone);
+    handleClose();
+    console.log("Theathre Data !!", theatreData);
+  };
+
+  useEffect(() => {
+    console.log("!!");
+    setTheatreData(theatresDetails);
+  }, [theatresDetails]);
 
   return (
     <div>
@@ -32,8 +45,7 @@ const TheatreForm = (props) => {
               defaultValue={theatresDetails.name}
               onChange={(e) => {
                 setTheatreData((prev) => {
-                  prev.theatre = e.target.value;
-                  return prev;
+                  return { ...prev, name: e.target.value };
                 });
               }}
               value={theatreData.theatre}
@@ -44,9 +56,9 @@ const TheatreForm = (props) => {
             <Form.Control
               defaultValue={theatresDetails.location}
               onChange={(e) => {
+                console.log("Test !!!!!", e.target.value);
                 setTheatreData((prev) => {
-                  prev.location = e.target.value;
-                  return prev;
+                  return { ...prev, location: e.target.value };
                 });
               }}
               value={theatreData.location}
@@ -58,8 +70,7 @@ const TheatreForm = (props) => {
               defaultValue={theatresDetails.price}
               onChange={(e) => {
                 setTheatreData((prev) => {
-                  prev.price = e.target.value;
-                  return prev;
+                  return { ...prev, price: e.target.value };
                 });
               }}
               value={theatreData.price}
@@ -68,13 +79,13 @@ const TheatreForm = (props) => {
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Timings (Add times separated by Commas)</Form.Label>
             <Form.Control
+              defaultValue={theatresDetails.shows || ""}
               onChange={(e) => {
                 setTheatreData((prev) => {
-                  prev.timings = e.target.value;
-                  return prev;
+                  return { ...prev, shows: e.target.value };
                 });
               }}
-              value={theatreData.timings}
+              value={theatreData.shows}
             />
           </Form.Group>
         </Modal.Body>
@@ -83,7 +94,7 @@ const TheatreForm = (props) => {
             variant="primary"
             onClick={() => {
               console.log(theatreData);
-              handleTheatres(theatreData, location);
+              onSaveClick(theatreData, location);
             }}
           >
             Save Changes
