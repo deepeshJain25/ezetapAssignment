@@ -97,7 +97,7 @@ const MovieTable = () => {
           langs={extractAllData(data, "language")}
           handleFilters={setFilters}
         />
-        <Table bordered hover striped className="movie-table">
+        <Table bordered hover className="movie-table">
           <thead>
             <tr>
               <th>Name</th>

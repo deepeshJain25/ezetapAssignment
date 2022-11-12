@@ -1,23 +1,30 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "react-bootstrap";
 import DropDown from "./DropDown";
 
 const FilterAndSort = (props) => {
-  const langRef = useRef(null);
-  const genreRef = useRef(null);
-  const locRef = useRef(null);
-  const sortRef = useRef(null);
+  const [filters, setFilters] = useState({});
 
   const handleChange = (e, ref) => {
-    ref.current = e.target.value;
+    setFilters((prev) => {
+      return { ...prev, [ref]: e.target.value };
+    });
   };
 
-  const handleApply = (loc, lang, genre, sort) => {
+  const handleApply = (data) => {
+    const { lang, loc, genre, sort } = data;
     props.handleFilters({ lang, loc, genre, sort });
   };
 
   const clear = () => {
     props.handleFilters({
+      lang: "",
+      loc: "",
+      genre: "",
+      sort: "",
+    });
+
+    setFilters({
       lang: "",
       loc: "",
       genre: "",
@@ -31,44 +38,39 @@ const FilterAndSort = (props) => {
         <h4 className="txt">Filter By</h4>
         <div className="filter-select">
           <DropDown
-            handleChange={handleChange}
+            handleChange={(e) => handleChange(e, "loc")}
             type="Location"
             data={props.locs}
-            reference={locRef}
+            selectedValue={filters.loc}
           />
           <DropDown
-            handleChange={handleChange}
+            handleChange={(e) => handleChange(e, "genre")}
             type="Genre"
             data={props.genres}
-            reference={genreRef}
+            selectedValue={filters.genre}
           />
           <DropDown
-            handleChange={handleChange}
+            handleChange={(e) => handleChange(e, "lang")}
             type="Language"
             data={props.langs}
-            reference={langRef}
+            selectedValue={filters.lang}
           />
         </div>
       </div>
       <div className="sort-by">
         <h4 className="text">Sort By</h4>
         <DropDown
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, "sort")}
           type="Sort"
           data={["Language", "Name"]}
-          reference={sortRef}
+          selectedValue={filters.sort}
         />
       </div>
       <div className="filter-button">
         <Button
           onClick={() => {
-            console.log(locRef, langRef, genreRef, sortRef);
-            handleApply(
-              locRef.current,
-              langRef.current,
-              genreRef.current,
-              sortRef.current
-            );
+            console.log(filters);
+            handleApply(filters);
           }}
           variant="primary"
           className="apply-btn"
@@ -90,38 +92,3 @@ const FilterAndSort = (props) => {
 };
 
 export default FilterAndSort;
-
-{
-  /* <select
-          onChange={(e) => {
-            locRef.current = e.target.value;
-          }}
-        >
-          <option>Select a Location</option>
-          {props.locs.map((location) => (
-            <option>{location}</option>
-          ))}
-        </select> */
-}
-{
-  /* <select
-          onChange={(e) => {
-            genreRef.current = e.target.value;
-          }}
-        >
-          <option>Select a Genre</option>
-          {props.genres.map((genre) => (
-            <option>{genre}</option>
-          ))}
-        </select>
-        <select
-          onChange={(e) => {
-            langRef.current = e.target.value;
-          }}
-        >
-          <option>Select a Language</option>
-          {props.langs.map((lang) => (
-            <option>{lang}</option>
-          ))}
-        </select> */
-}

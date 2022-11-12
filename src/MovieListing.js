@@ -3,7 +3,7 @@ import { data } from "./Data";
 import { useHistory } from "react-router-dom";
 import TheatreListing from "./TheatreListing";
 import { LocationContext } from "./Contexts/LocationContext";
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 
 const MovieListing = () => {
   const history = useHistory();
@@ -23,6 +23,9 @@ const MovieListing = () => {
             return <TheatreListing data={data} />;
           })}
       </div>
+      <Button variant="secondary" onClick={() => history.goBack()}>
+        Go Back
+      </Button>
     </Container>
   );
 };

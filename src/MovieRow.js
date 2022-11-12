@@ -1,22 +1,41 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { LocationContext } from "./Contexts/LocationContext";
 import { Input } from "reactstrap";
 
-const MovieRow = ({movieDetail, handleEdit}) => {
+const MovieRow = ({ movieDetail, handleEdit }) => {
   const history = useHistory();
-  console.log('Movie Detail', movieDetail);
-  const {name = '', cast = [], genre = '', language = '', locations = []} = movieDetail
+  console.log("Movie Detail", movieDetail);
+  const {
+    name = "",
+    cast = [],
+    genre = "",
+    language = "",
+    locations = [],
+  } = movieDetail;
+  const [showButton, setShowButton] = useState(false);
+  const [rowLocation, setRowLocation] = useState("");
+
   const { setLocation } = useContext(LocationContext);
+
   const showMovie = () => {
-    history.push(`/movie?${ name}`);
+    history.push(`/movie?${name}`);
   };
 
   let castString = "";
-   cast.forEach((cast) => {
+  cast.forEach((cast) => {
     castString = cast + ", " + castString;
   });
+
+  useEffect(() => {
+    if (rowLocation !== "") {
+      setShowButton(true);
+    } else {
+      setShowButton(false);
+    }
+    setLocation(rowLocation);
+  }, [rowLocation]);
 
   return (
     <tr>
@@ -25,9 +44,15 @@ const MovieRow = ({movieDetail, handleEdit}) => {
       <td>{language}</td>
       <td>{genre}</td>
       <td>
-        <Input type="select" onChange={(e) => setLocation(e.target.value)}>
-          { locations.map((loc) => (
-            <option>{loc}</option>
+        <Input
+          type="select"
+          onChange={(e) => {
+            setRowLocation(e.target.value);
+          }}
+        >
+          <option value={""}>Select a Location</option>
+          {locations.map((loc) => (
+            <option value={loc}>{loc}</option>
           ))}
         </Input>
       </td>
@@ -35,6 +60,7 @@ const MovieRow = ({movieDetail, handleEdit}) => {
         <Button
           onClick={showMovie}
           style={{ marginRight: "12px", padding: "10px 22px" }}
+          disabled={!showButton}
         >
           View Details
         </Button>
