@@ -52,14 +52,8 @@ const MovieForm = (props) => {
     setLocations((prev) => prev.filter((addedLoc) => !(addedLoc === loc)));
   };
 
-  const handleTheatres = (data, location) => {
-    if (Array.isArray(movieData.theatres[location])) {
-      movieData.theatres[location].push(data);
-    } else {
-      movieData.theatres[location] = [];
-      movieData.theatres[location].push(data);
-    }
-    console.log(movieData);
+  const handleTheatres = (updatedTheathreDetail) => {
+    console.log('Final !@!@', updatedTheathreDetail);
   };
 
   const onLocationSelect = (locationDetail) => {
