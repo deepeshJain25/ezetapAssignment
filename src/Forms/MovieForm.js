@@ -28,6 +28,8 @@ const MovieForm = (props) => {
   const [showTheatreModal, setShowTheatreModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({});
 
+  console.log('!@#$%^&*');
+
   useEffect(() => {
     setMovieData((prev) => {
       return { ...prev, locations: locations };
@@ -35,18 +37,17 @@ const MovieForm = (props) => {
   }, [locations]);
 
   useEffect(() => {
-    setLocations(movieLocations);
-  }, [movieLocations]);
-
-  useEffect(() => {
     setSelectedTheatres(theatres);
   }, [theatres]);
+
+  useEffect(() => {
+    setMovieData(props.movieData);
+  }, [props.movieData])
 
   const handleClose = () => setShowTheatreModal(false);
 
   const closeModal = () => {
     props.setShow(false);
-    // setLocations([]);
   };
 
   const handleShow = (loc) => {
@@ -55,11 +56,6 @@ const MovieForm = (props) => {
   };
 
   const handleLocations = () => {
-    // setLocations((prev) => {
-    //   const addedLocs = [...prev, locationRef.current];
-    //   movieDataRef.current.locations = addedLocs;
-    //   return addedLocs;
-    // });
     setLocations((prev) => {
       console.log(prev);
       const newLocationObject = {
@@ -76,7 +72,7 @@ const MovieForm = (props) => {
   };
 
   const handleTheatres = (updatedTheathreDetail) => {
-    console.log('Final !@!@', updatedTheathreDetail);
+    console.log('Final #######', updatedTheathreDetail);
   };
 
   const onLocationSelect = (locationDetail) => {
@@ -175,7 +171,7 @@ const MovieForm = (props) => {
             <br />
             <br />
             {console.log("Locations ------>", locations)}
-            {locations.map((loc) => (
+            {movieLocations.map((loc) => (
               <div
                 onClick={() => onLocationSelect(loc)}
                 className={getLocationClass(loc.id)}
@@ -219,7 +215,7 @@ const MovieForm = (props) => {
           <Button
             variant="primary"
             onClick={() => {
-              console.log(movieData);
+              console.log('########', movieData);
             }}
           >
             Save Changes
