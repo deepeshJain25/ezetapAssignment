@@ -6,7 +6,6 @@ import { Input } from "reactstrap";
 
 const MovieRow = ({ movieDetail, handleEdit }) => {
   const history = useHistory();
-  console.log("Movie Detail", movieDetail);
   const {
     name = "",
     cast = [],

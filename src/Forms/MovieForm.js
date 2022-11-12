@@ -4,7 +4,6 @@ import TheatreForm from "./TheatreForm";
 import "../style/movie-form.scss";
 
 const MovieForm = (props) => {
-  console.log("props !!", props);
   const {
     movieData: {
       genre = "",
@@ -15,15 +14,16 @@ const MovieForm = (props) => {
       location: movieLocations = [],
     } = {},
   } = props;
-  console.log("Movie Data --", props);
   const locationRef = useRef("");
+  const theatreRef = useRef("");
+
   const selectedTheathreDetails = useRef({});
 
   // const movieDataRef = useRef({});
 
   const [movieData, setMovieData] = useState({});
-  const [locations, setLocations] = useState(movieLocations);
-  const [selectedTheatres, setSelectedTheatres] = useState(theatres);
+  const [locations, setLocations] = useState([]);
+  const [allTheatres, setAllTheatres] = useState({});
 
   const [showTheatreModal, setShowTheatreModal] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({});
@@ -36,17 +36,16 @@ const MovieForm = (props) => {
 
   useEffect(() => {
     setLocations(movieLocations);
-  }, [movieLocations]);
+  }, []);
 
   useEffect(() => {
-    setSelectedTheatres(theatres);
-  }, [theatres]);
+    setAllTheatres(theatres);
+  }, []);
 
   const handleClose = () => setShowTheatreModal(false);
 
   const closeModal = () => {
     props.setShow(false);
-    // setLocations([]);
   };
 
   const handleShow = (loc) => {
@@ -55,13 +54,7 @@ const MovieForm = (props) => {
   };
 
   const handleLocations = () => {
-    // setLocations((prev) => {
-    //   const addedLocs = [...prev, locationRef.current];
-    //   movieDataRef.current.locations = addedLocs;
-    //   return addedLocs;
-    // });
     setLocations((prev) => {
-      console.log(prev);
       const newLocationObject = {
         id: prev.length + 100,
         name: locationRef.current,
@@ -75,6 +68,19 @@ const MovieForm = (props) => {
     setLocations((prev) => prev.filter((addedLoc) => !(addedLoc === loc)));
   };
 
+  const clearTheatre = (theatreData) => {
+    const selectedLocationTheatres = allTheatres[selectedLocation.id];
+    const newTheatreData = selectedLocationTheatres.filter(
+      (th) => !(th.name === theatreData.name)
+    );
+    setAllTheatres((prev) => {
+      prev[selectedLocation.id] = newTheatreData;
+      return prev;
+    });
+    // allTheatres[selectedLocation.id] = newTheatreData;
+    // setAllTheatres(allTheatres);
+  };
+
   const handleTheatres = (data, location) => {
     if (Array.isArray(movieData.theatres[location])) {
       movieData.theatres[location].push(data);
@@ -82,11 +88,9 @@ const MovieForm = (props) => {
       movieData.theatres[location] = [];
       movieData.theatres[location].push(data);
     }
-    console.log(movieData);
   };
 
   const onLocationSelect = (locationDetail) => {
-    console.log("Inside onlocationselect", locationDetail);
     setSelectedLocation(locationDetail);
   };
 
@@ -162,7 +166,6 @@ const MovieForm = (props) => {
                 <Form.Select
                   onChange={(e) => {
                     locationRef.current = e.target.value;
-                    console.log("Selected Location", e.target.value);
                   }}
                 >
                   <option value="Pune">Pune</option>
@@ -180,7 +183,6 @@ const MovieForm = (props) => {
             </Button>
             <br />
             <br />
-            {console.log("Locations ------>", locations)}
             {locations.map((loc) => (
               <div
                 onClick={() => onLocationSelect(loc)}
@@ -192,12 +194,27 @@ const MovieForm = (props) => {
             <br />
             <h6>Theathre Details:</h6>
             <br />
-            {console.log("theatres=======> ", selectedTheatres)}
-            {!selectedTheatres[selectedLocation.id] && (
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Add Theatres</Form.Label>
+              <Form.Control
+                onChange={(e) => {
+                  theatreRef.current = e.target.value;
+                }}
+              />
+              <br />
+              <Button
+                className="add-locations"
+                onClick={handleTheatres}
+                variant="secondary"
+              >
+                Add Theatre
+              </Button>
+            </Form.Group>
+            {!allTheatres[selectedLocation.id] && (
               <p>Please select the locations to see the details</p>
             )}
-            {selectedTheatres[selectedLocation.id] &&
-              selectedTheatres[selectedLocation.id].map((theatreDetail) => {
+            {allTheatres[selectedLocation.id] &&
+              allTheatres[selectedLocation.id].map((theatreDetail) => {
                 return (
                   <div style={{ display: "flex" }}>
                     <p style={{ marginRight: "10px" }}>{theatreDetail.name}</p>
@@ -207,14 +224,14 @@ const MovieForm = (props) => {
                       onClick={() => handleShow(theatreDetail)}
                       variant="secondary"
                     >
-                      Edit Details
+                      Add Details
                     </Button>
                     <Button
                       size="sm"
-                      onClick={() => clearLocation(theatreDetail)}
+                      onClick={() => clearTheatre(theatreDetail)}
                       variant="secondary"
                     >
-                      Clear Location
+                      Clear Theatre
                     </Button>
                   </div>
                 );

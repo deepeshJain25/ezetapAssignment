@@ -2,8 +2,13 @@ import React, { useRef, useState } from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 
 const TheatreForm = (props) => {
-  const {showTheatreModal = false, handleClose = () => {}, location = {}, handleTheatres = () => {}, theatresDetails = {} } = props;
-  console.log('Theathre form', theatresDetails);
+  const {
+    showTheatreModal = false,
+    handleClose = () => {},
+    location = {},
+    handleTheatres = () => {},
+    theatresDetails = {},
+  } = props;
   const [theatreData, setTheatreData] = useState({});
 
   return (
@@ -16,7 +21,7 @@ const TheatreForm = (props) => {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            Theatre Details for {  location.name || 'NA'} <br />
+            Theatre Details for {location.name || "NA"} <br />
             (Add Theatre details and save changes to add more Theatres)
           </Modal.Title>
         </Modal.Header>
@@ -50,7 +55,7 @@ const TheatreForm = (props) => {
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Price of Ticket</Form.Label>
             <Form.Control
-            defaultValue={theatresDetails.price}
+              defaultValue={theatresDetails.price}
               onChange={(e) => {
                 setTheatreData((prev) => {
                   prev.price = e.target.value;
@@ -78,7 +83,7 @@ const TheatreForm = (props) => {
             variant="primary"
             onClick={() => {
               console.log(theatreData);
-                handleTheatres(theatreData,   location);
+              handleTheatres(theatreData, location);
             }}
           >
             Save Changes

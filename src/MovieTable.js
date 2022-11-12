@@ -28,10 +28,6 @@ const MovieTable = () => {
 
   useEffect(() => {
     setLocation("");
-    console.log("fetcth movies");
-    axios
-      .get("http://localhost:4000/allMovies")
-      .then((res) => console.log(res.data));
   }, []);
 
   useEffect(() => {
@@ -77,9 +73,7 @@ const MovieTable = () => {
     const rowData = tableData.find((movie) => {
       return movie.name === movieName;
     });
-    console.log('Row Data', rowData);
     setMovieDetails(rowData);
-    setPopulateData(true);
     setShowModal(true);
   };
 
@@ -110,10 +104,7 @@ const MovieTable = () => {
           </thead>
           <tbody>
             {tableData.map((movie) => (
-              <MovieRow
-                movieDetail={movie}
-                handleEdit={handleEdit}
-              />
+              <MovieRow movieDetail={movie} handleEdit={handleEdit} />
             ))}
           </tbody>
         </Table>
@@ -122,7 +113,6 @@ const MovieTable = () => {
           show={showModal}
           setShow={setShowModal}
           movieData={movieDetails}
-          populateData={populateData}
         />
       </Container>
     </div>
