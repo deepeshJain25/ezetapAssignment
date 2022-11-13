@@ -7,7 +7,6 @@ const DeleteForm = ({
   closeDelete,
   movie,
   isMovieDeleted,
-  movieDeleteError,
 }) => {
   return (
     <div>
@@ -32,11 +31,11 @@ const DeleteForm = ({
           <br />
           <br />
 
-          {isMovieDeleted ? (
+          {isMovieDeleted.confirmation ? (
             <h5 style={{ color: "blue" }}>Movie deleted Successfully</h5>
-          ) : movieDeleteError.length !== 0 ? (
+          ) : isMovieDeleted.message.length !== 0 ? (
             <h5 style={{ color: "red" }}>
-              {movieDeleteError}, Please Try Again !!
+              {isMovieDeleted.message}, Please Try Again !!
             </h5>
           ) : null}
         </Modal.Body>

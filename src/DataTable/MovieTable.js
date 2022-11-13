@@ -17,30 +17,27 @@ const MovieTable = () => {
   });
 
   const [tableData, setTableData] = useState([]);
-
   const [allData, setAllData] = useState([]);
-
   const [movieDetails, setMovieDetails] = useState({});
-
   const [showModal, setShowModal] = useState(false);
-
   const [showDelete, setShowDelete] = useState(false);
-
   const [isAddMode, setIsAddMode] = useState(false);
-
-  const [isMovieDeleted, setIsMovieDeleted] = useState(false);
-
-  const [movieDeleteError, setMovieDeleteError] = useState("");
+  const [isMovieDeleted, setIsMovieDeleted] = useState({
+    confirmation: false,
+    message: "",
+  });
 
   const deletedMovieRef = useRef("");
 
   const { setLocation } = useContext(LocationContext);
 
+  // refetching data at every show of landing page //
   useEffect(() => {
     setLocation("");
     fetchData();
   }, []);
 
+  // to clear form data for addition of movies //
   useEffect(() => {
     if (isAddMode) {
       setMovieDetails({});
@@ -48,6 +45,7 @@ const MovieTable = () => {
     }
   }, [isAddMode]);
 
+  // to filter table data //
   useEffect(() => {
     const modifiedData = allData.filter((movieData) => {
       const isLang = !filters.lang || movieData.language === filters.lang;
@@ -103,15 +101,23 @@ const MovieTable = () => {
         console.log(res);
 
         fetchData();
-        setIsMovieDeleted(true);
+        setIsMovieDeleted({
+          confirmation: true,
+          message: "",
+        });
         setTimeout(() => {
           setShowDelete(false);
-          setIsMovieDeleted(false);
+          setIsMovieDeleted({
+            confirmation: false,
+            message: "",
+          });
         }, 2000);
       })
       .catch((err) => {
-        setIsMovieDeleted(false);
-        setMovieDeleteError(err.message);
+        setIsMovieDeleted({
+          confirmation: false,
+          message: err.message,
+        });
       });
   };
 
@@ -123,7 +129,10 @@ const MovieTable = () => {
   const closeDelete = () => {
     deletedMovieRef.current = "";
     setShowDelete(false);
-    setMovieDeleteError("");
+    setIsMovieDeleted({
+      confirmation: false,
+      message: "",
+    });
   };
 
   // fetch all data api //
@@ -184,7 +193,6 @@ const MovieTable = () => {
           closeDelete={closeDelete}
           movie={deletedMovieRef.current}
           isMovieDeleted={isMovieDeleted}
-          movieDeleteError={movieDeleteError}
         />
       </Container>
     </div>
