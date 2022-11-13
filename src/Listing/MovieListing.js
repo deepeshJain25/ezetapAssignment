@@ -4,6 +4,8 @@ import TheatreListing from "./TheatreListing";
 import { LocationContext } from "../Contexts/LocationContext";
 import { Container, Button } from "react-bootstrap";
 import axios from "axios";
+import '../style/theatre-listing.scss';
+
 const MovieListing = () => {
   const history = useHistory();
   const { location } = useContext(LocationContext);
@@ -24,8 +26,8 @@ const MovieListing = () => {
 
   return (
     <Container>
-      <div className="movie-info">
-        <h3>
+      <div className="movie-info movie-listing">
+        <h3 className="movie-listing-title">
           Details of <b style={{ color: "green" }}>{movieName}</b> at{" "}
           <b style={{ color: "blue" }}>{location}</b>
         </h3>

@@ -1,50 +1,48 @@
 import React from "react";
+import '../style/theatre-listing.scss';
 
 const TheatreListing = ({
   data: { name = "", location = "", price = "", shows = "" },
   index,
 }) => {
   return (
-    <div className="movie-flex">
-      <p>{index + 1}.</p>
-      <p>
+    <div className="movie-flex theatre-listing-container">
+      <div className="theatre-listing-index">
+        <span>{index + 1}.</span>
+      </div>
+      <div className="theatre-listing-name">
+      <span>
         {name}{" "}
         {location ? (
           <b>({location})</b>
         ) : (
           <b style={{ color: "red" }}>(No location added)</b>
         )}
-      </p>
-      {price !== "" ? (
-        <p>
-          {"Rs. "}
-          {price}
-        </p>
-      ) : (
-        <p style={{ color: "red" }}>No Price Added</p>
-      )}
-      {!shows ? (
-        <p style={{ color: "red" }}>No Shows Added</p>
-      ) : (
-        shows.split(",").map((showTiming) => {
-          return (
-            <div
-              style={{
-                height: "50px",
-                width: "100px",
-                border: "solid 2px",
-                margin: "10px",
-                borderRadius: "10px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <p style={{ color: "green" }}>{showTiming} hrs</p>
-            </div>
-          );
-        })
-      )}
+      </span>
+      </div>
+      <div className="theatre-listing-price">
+        {price !== "" ? (
+          <span>
+            {"Rs. "}
+            {price}
+          </span>
+        ) : (
+          <p style={{ color: "red" }}>No Price Added</p>
+        )}
+      </div>
+      <div className="theatre-listing-shows">
+        {!shows ? (
+          <p style={{ color: "red" }}>No Shows Added</p>
+        ) : (
+          shows.split(",").map((showTiming) => {
+            return (
+              <div className="theatre-listing-timing">
+                <span>{showTiming} hrs</span>
+              </div>
+            );
+          })
+        )}
+      </div>
       {}
     </div>
   );

@@ -25,3 +25,20 @@
     background-color: rgb(214, 241, 214);
 
 }
+
+.theatre-details-content {
+    display: flex;
+    padding: 8px;
+    align-items: center;
+    border-radius: 8px;
+    background-color: #f2f2f2;
+    margin-bottom: 10px;
+    
+    .theatre-name { 
+        flex: 1;
+    }
+
+    .theathre-action-btn {
+        margin-right: 10px;
+    }
+}

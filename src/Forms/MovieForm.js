@@ -358,24 +358,15 @@ const MovieForm = (props) => {
                 {allTheatres[selectedLocation.id] &&
                   allTheatres[selectedLocation.id].map((theatreDetail) => {
                     return (
-                      <div style={{ display: "flex" }}>
-                        <p style={{ marginRight: "20px" }}>
+                      <div className="theatre-details-content">
+                        <div className="theatre-name">
                           {theatreDetail.name}
-                        </p>
-                        <Button
-                          style={{ marginRight: "10px" }}
-                          size="sm"
-                          onClick={() => handleShow(theatreDetail)}
-                          variant="primary"
-                        >
+                        </div>
+                        <Button onClick={() => handleShow(theatreDetail)} size="sm" className="theathre-action-btn" variant="outline-primary">
                           Add Details
                         </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => clearTheatre(theatreDetail)}
-                          variant="primary"
-                        >
-                          Clear Theatre
+                        <Button onClick={() => clearTheatre(theatreDetail)} size="sm" className="theathre-action-btn" variant="outline-danger">
+                          Clear
                         </Button>
                       </div>
                     );
