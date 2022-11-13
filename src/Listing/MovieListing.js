@@ -31,10 +31,26 @@ const MovieListing = () => {
           Details of <b style={{ color: "green" }}>{movieName}</b> at{" "}
           <b style={{ color: "blue" }}>{location}</b>
         </h3>
-        {data &&
-          data.map((data, i) => {
-            return <TheatreListing data={data} index={i} />;
+        <div className="theatre-listing-main">
+          <div className="theatre-listing-column-name">
+          <div className="theatre-listing-index table-heading">
+            Index
+      </div>
+      <div className="theatre-listing-name table-heading">
+        Name
+      </div>
+      <div className="theatre-listing-price table-heading">
+        Price
+      </div>
+      <div className="theatre-listing-shows table-heading">
+        Shows
+      </div>
+          </div>
+          {data &&
+            data.map((data, i) => {
+              return <TheatreListing data={data} index={i} />;
           })}
+        </div>
       </div>
       <Button variant="secondary" onClick={() => history.goBack()}>
         Go Back
