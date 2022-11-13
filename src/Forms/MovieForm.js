@@ -4,9 +4,8 @@ import TheatreForm from "./TheatreForm";
 import "../style/movie-form.scss";
 import axios from "axios";
 
-const MovieForm = (props) => {
+const MovieForm = ({movieData: mData, fetchData, addMode, setAddMode, show, setShow}) => {
   const {
-    movieData: {
       id: movieId = 0,
       genre = "",
       name = "",
@@ -14,11 +13,7 @@ const MovieForm = (props) => {
       cast = "",
       theatres = {},
       location: movieLocations = [],
-    } = {},
-    fetchData,
-    addMode,
-    setAddMode,
-  } = props;
+  } = mData;
 
   const locationRef = useRef("");
   const selectedTheathreDetails = useRef({});
@@ -38,15 +33,11 @@ const MovieForm = (props) => {
   const [showError, setShowError] = useState({});
 
   useEffect(() => {
-    // if (!addMode) {
-    //   setMovieData(props.movieData);
-    // } else {
-    //   setMovieData({});
-    // }
-    setMovieData(props.movieData);
+    setMovieData(movieData);
     setAllTheatres(theatres);
     setLocations(movieLocations);
-  }, [props]);
+  }, [mData])
+
 
   useEffect(() => {
     axios.get("http://localhost:4000/allGenres").then((res) => {
@@ -55,12 +46,15 @@ const MovieForm = (props) => {
     axios.get("http://localhost:4000/allLocations").then((res) => {
       setAllLocations(res.data);
     });
+    return () => {
+      setMovieData({});
+  }
   }, []);
 
   const handleClose = () => setShowTheatreModal(false);
 
   const closeModal = () => {
-    props.setShow(false);
+    setShow(false);
     fetchData();
     setAddMode(false);
   };
@@ -203,7 +197,7 @@ const MovieForm = (props) => {
 
   return (
     <div>
-      <Modal show={props.show} onHide={closeModal} backdrop="static" scrollable>
+      <Modal show={show} onHide={closeModal} backdrop="static" scrollable>
         <Modal.Header closeButton>
           <Modal.Title>Movie Details</Modal.Title>
         </Modal.Header>

@@ -130,7 +130,7 @@ const MovieTable = () => {
         <MovieForm
           show={showModal}
           setShow={setShowModal}
-          movieData={movieDetails}
+          movieData={isAddMode ? {} : movieDetails}
           fetchData={fetchData}
           addMode={isAddMode}
           setAddMode={setIsAddMode}
