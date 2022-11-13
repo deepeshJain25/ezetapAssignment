@@ -4,7 +4,7 @@ import TheatreListing from "./TheatreListing";
 import { LocationContext } from "../Contexts/LocationContext";
 import { Container, Button } from "react-bootstrap";
 import axios from "axios";
-import '../style/theatre-listing.scss';
+import "../style/theatre-listing.scss";
 
 const MovieListing = () => {
   const history = useHistory();
@@ -23,35 +23,35 @@ const MovieListing = () => {
       setData(theatreData);
     });
   }, []);
-
   return (
     <Container>
       <div className="movie-info movie-listing">
-        <h3 className="movie-listing-title">
-          Details of <b style={{ color: "green" }}>{movieName}</b> at{" "}
-          <b style={{ color: "blue" }}>{location}</b>
-        </h3>
-        <div className="theatre-listing-main">
-          <div className="theatre-listing-column-name">
-          <div className="theatre-listing-index table-heading">
-            Index
+        {data.length ? (
+          <>
+            <h3 className="movie-listing-title">
+              Details of <b style={{ color: "green" }}>{movieName}</b> at{" "}
+              <b style={{ color: "blue" }}>{location}</b>
+            </h3>
+            <div className="theatre-listing-main">
+              <div className="theatre-listing-column-name">
+                <div className="theatre-listing-index table-heading">Index</div>
+                <div className="theatre-listing-name table-heading">
+                  Theatre Name
+                </div>
+                <div className="theatre-listing-price table-heading">Price</div>
+                <div className="theatre-listing-shows table-heading">Shows</div>
+              </div>
+              {data &&
+                data.map((data, i) => {
+                  return <TheatreListing data={data} index={i} />;
+                })}
+            </div>
+          </>
+        ) : (
+          <h4 style={{ color: "red" }}>No Theatres added for this location.</h4>
+        )}
       </div>
-      <div className="theatre-listing-name table-heading">
-        Name
-      </div>
-      <div className="theatre-listing-price table-heading">
-        Price
-      </div>
-      <div className="theatre-listing-shows table-heading">
-        Shows
-      </div>
-          </div>
-          {data &&
-            data.map((data, i) => {
-              return <TheatreListing data={data} index={i} />;
-          })}
-        </div>
-      </div>
+
       <Button variant="secondary" onClick={() => history.goBack()}>
         Go Back
       </Button>

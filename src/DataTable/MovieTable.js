@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import MovieRow from "./MovieRow";
 import Filters from "../Components/FilterAndSort";
 import MovieForm from "../Forms/MovieForm";
+import DeleteForm from "../Forms/DeleteForm";
 import { Table, Button } from "react-bootstrap";
 import { LocationContext } from "../Contexts/LocationContext";
 import { Container, Row, Col } from "reactstrap";
@@ -23,17 +24,30 @@ const MovieTable = () => {
 
   const [showModal, setShowModal] = useState(false);
 
+  const [showDelete, setShowDelete] = useState(false);
+
   const [isAddMode, setIsAddMode] = useState(false);
+
+  const [isMovieDeleted, setIsMovieDeleted] = useState(false);
+
+  const [movieDeleteError, setMovieDeleteError] = useState("");
+
+  const deletedMovieRef = useRef("");
 
   const { setLocation } = useContext(LocationContext);
 
-  // initial fetch of data //
   useEffect(() => {
     setLocation("");
     fetchData();
   }, []);
 
-  // applying filters to table data //
+  useEffect(() => {
+    if (isAddMode) {
+      setMovieDetails({});
+      setShowModal(true);
+    }
+  }, [isAddMode]);
+
   useEffect(() => {
     const modifiedData = allData.filter((movieData) => {
       const isLang = !filters.lang || movieData.language === filters.lang;
@@ -73,12 +87,6 @@ const MovieTable = () => {
     setTableData(modifiedData);
   }, [filters]);
 
-  // opens add movie modal //
-  const handleAddMovie = () => {
-    setIsAddMode(true);
-    setShowModal(true);
-  };
-
   //opens edit movie modal //
   const handleEdit = (movieName) => {
     const rowData = tableData.find((movie) => {
@@ -86,6 +94,36 @@ const MovieTable = () => {
     });
     setMovieDetails(rowData);
     setShowModal(true);
+  };
+
+  const handleDelete = () => {
+    axios
+      .post(`http://localhost:4000/deleteMovie/${deletedMovieRef.current}`)
+      .then((res) => {
+        console.log(res);
+
+        fetchData();
+        setIsMovieDeleted(true);
+        setTimeout(() => {
+          setShowDelete(false);
+          setIsMovieDeleted(false);
+        }, 2000);
+      })
+      .catch((err) => {
+        setIsMovieDeleted(false);
+        setMovieDeleteError(err.message);
+      });
+  };
+
+  const openDeleteModal = (movieName) => {
+    deletedMovieRef.current = movieName;
+    setShowDelete(true);
+  };
+
+  const closeDelete = () => {
+    deletedMovieRef.current = "";
+    setShowDelete(false);
+    setMovieDeleteError("");
   };
 
   // fetch all data api //
@@ -123,11 +161,15 @@ const MovieTable = () => {
           </thead>
           <tbody>
             {tableData.map((movie) => (
-              <MovieRow movieDetail={movie} handleEdit={handleEdit} />
+              <MovieRow
+                movieDetail={movie}
+                handleEdit={handleEdit}
+                handleDelete={openDeleteModal}
+              />
             ))}
           </tbody>
         </Table>
-        <Button onClick={() => handleAddMovie()}>Add Movie</Button>
+        <Button onClick={() => setIsAddMode(true)}>Add Movie</Button>
         <MovieForm
           show={showModal}
           setShow={setShowModal}
@@ -135,6 +177,14 @@ const MovieTable = () => {
           fetchData={fetchData}
           addMode={isAddMode}
           setAddMode={setIsAddMode}
+        />
+        <DeleteForm
+          show={showDelete}
+          handleDelete={handleDelete}
+          closeDelete={closeDelete}
+          movie={deletedMovieRef.current}
+          isMovieDeleted={isMovieDeleted}
+          movieDeleteError={movieDeleteError}
         />
       </Container>
     </div>
@@ -144,7 +194,6 @@ const MovieTable = () => {
 export default MovieTable;
 
 // utils for this file //
-
 const extractAllData = (data, param) => {
   const result = [];
   data.forEach((data) => {

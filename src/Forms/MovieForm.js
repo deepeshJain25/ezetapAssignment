@@ -41,15 +41,17 @@ const MovieForm = (props) => {
 
   // set states with initial values from props //
   useEffect(() => {
-    // if (!addMode) {
-    //   setMovieData(props.movieData);
-    // } else {
-    //   setMovieData({});
-    // }
     setMovieData(props.movieData);
     setAllTheatres(theatres);
     setLocations(movieLocations);
   }, [props]);
+
+  // clear form data when opening add new movie form //
+  useEffect(() => {
+    if (addMode) {
+      setMovieData({});
+    }
+  }, [addMode]);
 
   // fetch all genres and locations to show in dropdowns //
   useEffect(() => {
@@ -67,6 +69,7 @@ const MovieForm = (props) => {
   // to close movie modal //
   const closeModal = () => {
     props.setShow(false);
+    // setMovieData({});
     fetchData();
     setAddMode(false);
   };
@@ -95,10 +98,6 @@ const MovieForm = (props) => {
       }
       return prev;
     });
-  };
-
-  const clearLocation = (loc) => {
-    setLocations((prev) => prev.filter((addedLoc) => !(addedLoc === loc)));
   };
 
   // to delete a theatre //
@@ -279,7 +278,6 @@ const MovieForm = (props) => {
               <div style={{ display: "flex" }}>
                 <Form.Select
                   onChange={(e) => {
-                    console.log(e.target.value);
                     if (e.target.value.length !== 0) {
                       locationRef.current = e.target.value;
                       setShowAddLocationBtn(true);
@@ -359,13 +357,22 @@ const MovieForm = (props) => {
                   allTheatres[selectedLocation.id].map((theatreDetail) => {
                     return (
                       <div className="theatre-details-content">
-                        <div className="theatre-name">
-                          {theatreDetail.name}
-                        </div>
-                        <Button onClick={() => handleShow(theatreDetail)} size="sm" className="theathre-action-btn" variant="outline-primary">
-                          Add Details
+                        <div className="theatre-name">{theatreDetail.name}</div>
+
+                        <Button
+                          onClick={() => handleShow(theatreDetail)}
+                          size="sm"
+                          className="theathre-action-btn"
+                          variant="outline-primary"
+                        >
+                          Edit Details
                         </Button>
-                        <Button onClick={() => clearTheatre(theatreDetail)} size="sm" className="theathre-action-btn" variant="outline-danger">
+                        <Button
+                          onClick={() => clearTheatre(theatreDetail)}
+                          size="sm"
+                          className="theathre-action-btn"
+                          variant="outline-danger"
+                        >
                           Clear
                         </Button>
                       </div>

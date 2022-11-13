@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { LocationContext } from "../Contexts/LocationContext";
 import { Input } from "reactstrap";
 
-const MovieRow = ({ movieDetail, handleEdit }) => {
+const MovieRow = ({ movieDetail, handleEdit, handleDelete }) => {
   const history = useHistory();
   const {
     name = "",
@@ -56,14 +56,21 @@ const MovieRow = ({ movieDetail, handleEdit }) => {
           style={{ marginRight: "12px", padding: "10px 22px" }}
           disabled={!showButton}
         >
-          View Details
+          View
         </Button>
         <Button
           onClick={() => handleEdit(name)}
           variant="info"
           style={{ marginRight: "12px", padding: "10px 22px" }}
         >
-          Edit Details
+          Edit
+        </Button>
+        <Button
+          onClick={() => handleDelete(name)}
+          variant="danger"
+          style={{ marginRight: "12px", padding: "10px 22px" }}
+        >
+          Delete
         </Button>
       </td>
     </tr>

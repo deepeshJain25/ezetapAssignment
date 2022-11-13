@@ -92,7 +92,6 @@ const TheatreForm = (props) => {
           <Button
             variant="primary"
             onClick={() => {
-              console.log(theatreData);
               onSaveClick(theatreData, location);
             }}
           >
